@@ -1,6 +1,7 @@
 package kr.co.kwon.compose.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.RoundedCorner
@@ -15,6 +16,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import kr.co.kwon.compose.R
 import kr.co.kwon.compose.ui.theme.ComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,8 +42,10 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             LazyColumn {
-                items(listInItem()) {
-                    mainRecyclerViewHolder(str = it)
+                itemsIndexed(listInItem()) { index, item ->
+                    mainRecyclerViewHolder(
+                        index = index,
+                        str = item)
                 }
             }
         }
@@ -55,15 +60,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-@Preview
 @Composable
-fun DefaultPreview() {
-    mainRecyclerViewHolder(str = "기본 TEXT, IMAGEVIEW, BUTTON 체크해보기")
-}
+fun mainRecyclerViewHolder(
+    index : Int,
+    str : String) {
 
-@Composable
-fun mainRecyclerViewHolder(str : String) {
+    val ctx = LocalContext.current
+
     Card(
         Modifier
             .fillMaxWidth()
@@ -72,6 +75,22 @@ fun mainRecyclerViewHolder(str : String) {
             .height(50.dp)
             .clickable {
 
+                when(index) {
+
+                    0 -> {
+                        Intent(ctx, PracticeTextActivity::class.java).apply {
+                            ctx.startActivity(this)
+                        }
+                    }
+
+                    3 -> {
+                        Intent(ctx, PracticeLayoutActivity::class.java).apply {
+                            ctx.startActivity(this)
+                        }
+
+                    }
+
+                }
             }
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -132,8 +151,6 @@ fun ImageViewTest() {
             Text(text = "어렵네 컴포즈", modifier = Modifier.offset())
             Text(text = "콘스트레인트 없나?", modifier = Modifier.offset())
         }
-
-
     }
 }
 
