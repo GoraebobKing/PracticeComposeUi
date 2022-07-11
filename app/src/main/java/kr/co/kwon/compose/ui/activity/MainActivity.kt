@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
         add("기본 IMAGEVIEW")
         add("기본 View 사이즈 및 ConstraintLayout처럼 되는지 체크")
         add("기본 RecyclerView")
+        add("기본 TAB")
     }
 }
 
@@ -88,6 +89,12 @@ fun mainRecyclerViewHolder(
                             ctx.startActivity(this)
                         }
 
+                    }
+
+                    5 -> {
+                        Intent(ctx, PracticeTabActivity::class.java).apply {
+                            ctx.startActivity(this)
+                        }
                     }
 
                 }

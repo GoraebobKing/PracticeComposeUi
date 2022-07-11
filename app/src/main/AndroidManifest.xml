@@ -38,6 +38,13 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Compose">
         </activity>
+
+        <activity
+            android:name=".ui.activity.PracticeTabActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Compose">
+        </activity>
     </application>
 
 </manifest>

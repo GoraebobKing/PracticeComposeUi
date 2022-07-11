@@ -1,6 +1,7 @@
 package kr.co.kwon.compose.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -9,13 +10,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,17 +39,10 @@ class PracticeLayoutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            deepLayout()
-            basicLayout()
+            deepLayout()
+//            basicLayout()
         }
     }
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-//    deepLayout()
-    basicLayout()
 }
 
 /**
@@ -241,41 +235,149 @@ fun deepLayout(){
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 18.dp, top = 16.dp, end = 18.dp)
+                    .padding(start = 18.dp, top = 20.dp, end = 18.dp)
             ) {
-                Text(text = "인천공항1터미널행", fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
+
+                val (
+                    departTxt1, departTxt2, departTime1, departTime2,
+                    divider,
+                    arriveTxt1, arriveTxt2, arriveTime1, arriveTime2
+                ) = createRefs()
+                Text(
+                    modifier = Modifier.constrainAs(departTxt1){
+                        start.linkTo(parent.start)
+                        end.linkTo(departTime1.start, margin = 6.dp)
+                        width = Dimension.fillToConstraints
+                    },
+                    text = "인천공항1터미널행", maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
                     id = R.color.color_606060
                 ))
+
+                Text(
+                    modifier = Modifier.constrainAs(departTxt2){
+                        top.linkTo(departTxt1.bottom, margin = 6.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(departTime2.start, margin = 6.dp)
+                        width = Dimension.fillToConstraints
+                    },
+                    text = "인천공항2터미널행", maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
+                    id = R.color.color_606060
+                ))
+
+                Text(
+                    modifier = Modifier.constrainAs(departTime1){
+                        top.linkTo(departTxt1.top)
+                        bottom.linkTo(departTxt1.bottom)
+                        end.linkTo(divider.start, margin = 8.dp)
+                    },
+                    text = "1분1초", textAlign = TextAlign.Right,
+                    fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_eb5757
+                    ))
+
+                Text(
+                    modifier = Modifier.constrainAs(departTime2){
+                        top.linkTo(departTxt2.top)
+                        bottom.linkTo(departTxt2.bottom)
+                        end.linkTo(divider.start, margin = 8.dp)
+                    },
+                    text = "2분2초", textAlign = TextAlign.Right,
+                    fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_eb5757
+                    ))
+
+                Divider(
+                    modifier = Modifier
+                        .constrainAs(divider) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .width(1.dp)
+                        .height(38.dp),
+                    color = colorResource(id = R.color.color_eeeeee),
+                )
+
+                Text(
+                    modifier = Modifier.constrainAs(arriveTxt1){
+                        start.linkTo(divider.start, margin = 8.dp)
+                        end.linkTo(arriveTime1.start, margin = 6.dp)
+                        width = Dimension.fillToConstraints
+                    },
+                    text = "강남대로변 저 한복판", maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_606060
+                    ))
+
+                Text(
+                    modifier = Modifier.constrainAs(arriveTxt2){
+                        top.linkTo(arriveTxt1.bottom, margin = 6.dp)
+                        start.linkTo(divider.start, margin = 8.dp)
+                        end.linkTo(arriveTime1.start, margin = 6.dp)
+                        width = Dimension.fillToConstraints
+                    },
+                    text = "강남대로변 저 한복판 꽉막힌 차안", maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_606060
+                    ))
+
+                Text(
+                    modifier = Modifier
+                        .constrainAs(arriveTime1) {
+                            top.linkTo(arriveTxt1.top)
+                            bottom.linkTo(arriveTxt1.bottom)
+                            end.linkTo(parent.end)
+                        }
+                        .width(58.dp),
+                    text = "44분55초", textAlign = TextAlign.Right,
+                    fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_eb5757
+                    ))
+
+                Text(
+                    modifier = Modifier.constrainAs(arriveTime2){
+                        top.linkTo(arriveTxt2.top)
+                        bottom.linkTo(arriveTxt2.bottom)
+                        end.linkTo(parent.end)
+                    },
+                    text = "60분50초", textAlign = TextAlign.Right,
+                    fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
+                        id = R.color.color_eb5757
+                    ))
             }
-//            Column(
-//
-//            ) {
-//                Row {
-//                    Column {
-//
-//
-//                        Text(
-//                            modifier = Modifier.padding(top = 9.dp),
-//                            text = "인천공항1터미널행", fontWeight = FontWeight.W500, fontSize = 12.sp, color = colorResource(
-//                            id = R.color.color_606060
-//                        ))
-//                    }
-//
-//                    Column(
-//                        modifier = Modifier.padding(start = 8.dp)
-//                    ) {
-//                        Text(text = "곧 도착", fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
-//                            id = R.color.color_ff0000
-//                        ))
-//
-//                        Text(
-//                            modifier = Modifier.padding(top = 9.dp),
-//                            text = "9분23초", fontWeight = FontWeight.W400, fontSize = 12.sp, color = colorResource(
-//                            id = R.color.color_ff0000
-//                        ))
-//                    }
-//                }
-//            }
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 24.dp, start = 18.dp, end = 18.dp)
+                    .fillMaxWidth()
+                    .height(28.dp)
+                    .border(1.dp, colorResource(id = R.color.color_e3e3e3), RectangleShape),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                    text = "시간표", fontWeight = FontWeight.W400, fontSize = 12.sp,
+                    color = colorResource(id = R.color.color_818181), textAlign = TextAlign.Center
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .width(1.dp)
+                        .height(14.dp), color = colorResource(id = R.color.color_dadee3)
+                )
+                
+                Text(
+                    modifier = Modifier.fillMaxWidth(1f),
+                    text = "출구/시설", fontWeight = FontWeight.W400, fontSize = 12.sp,
+                    color = colorResource(id = R.color.color_818181), textAlign = TextAlign.Center
+                )
+
+
+            }
 
         }
     }
